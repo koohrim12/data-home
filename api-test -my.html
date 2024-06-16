@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      const API_key =
+        "7B0UdKJ9T4IeLL7vj40OSMderbRN3mFXhyra69Q2rlGmiPq9J1xEQcKxka6i2x8ywX9eDEW8qor5Keh8a0trgA%3D%3D";
+
+      const url = `
+              https://apis.data.go.kr/6300000/openapi2022/restrnt/getrestrnt?serviceKey=${API_key}&pageNo=1&numOfRows=10
+                  `;
+
+      function getData() {
+        const xhr = new XMLHttpRequest();
+        console.dir(xhr);
+        let requestMethod = "GET";
+        xhr.open("GET", url, true);
+        xhr.send();
+
+        xhr.addEventListener("load", () => {
+          if (xhr.status === 200) {
+            console.log("200 코드는 성공 코드이다.");
+            const result = JSON.parse(xhr.responseText);
+            console.dir(typeof result);
+            console.log(result);
+            console.dir(result.response.body.items);
+            console.log(result.response.body.items[0]);
+            console.log(result.response.body.items[1]);
+            const root = document.getElementById("root");
+            console.log(root);
+
+            let lists = [];
+            result.response.body.items.forEach((items) => {
+              lists.push(`<li>${items.restrntNm}</li>`);
+              lists.push(`<div>${items.restrntSumm}</div>`);
+            });
+
+            console.log(lists.join(""));
+
+            root.innerHTML = `<ul>${lists.join("")}</ul>`;
+            root.style.backgroundColor = "pink";
+          }
+        });
+      }
+      getData();
+    </script>
+  </body>
+</html>
